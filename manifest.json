@@ -1,0 +1,11 @@
+{
+	"id": "obsidian-telegram",
+	"name": "Obsidian-Telegram",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Obsidian-Telegram export plugin",
+	"author": "Michael Vetkin & Maxim Shkividorov",
+	"authorUrl": "mikevetkin.com",
+	"fundingUrl": "https://obsidian.md/pricing",
+	"isDesktopOnly": false
+}
