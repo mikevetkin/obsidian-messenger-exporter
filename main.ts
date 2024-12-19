@@ -27,14 +27,16 @@ export default class ObsidianTelegramPlugin extends Plugin {
 		/**
 		 * This creates an icon in the left ribbon.
 		 */
-		const ribbonIconEl = this.addRibbonIcon('dice', 'Obsidian-Telegram', (evt: MouseEvent) => {
-			this.perform();
-		});
+
+		// const ribbonIconEl = this.addRibbonIcon('dice', 'Obsidian-Telegram', (evt: MouseEvent) => {
+		// 	this.perform();
+		// });
 
 		/**
 		 * Perform additional things with the ribbon
 		 */
-		ribbonIconEl.addClass('my-plugin-ribbon-class');
+
+		// ribbonIconEl.addClass('my-plugin-ribbon-class');
 
 		/**
 		 * This creates line in the "file-menu"
