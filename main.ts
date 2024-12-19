@@ -21,7 +21,8 @@ export default class ObsidianTelegramPlugin extends Plugin {
 		if (markdownText) {
 			const ast = fromMarkdown(markdownText);
 			const telegramMessage = toTelegram(ast);
-			console.log('telegramMessage :>> ', telegramMessage);
+			navigator.clipboard.writeText(telegramMessage);
+			new Notice("Text was copied in Telegram message format!")
 		} else {
 			new Notice("Could not export text to Telegram")
 		}
