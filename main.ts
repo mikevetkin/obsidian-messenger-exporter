@@ -13,6 +13,14 @@ const DEFAULT_SETTINGS: ObsidianTelegramPluginSettings = {
 export default class ObsidianTelegramPlugin extends Plugin {
 	settings: ObsidianTelegramPluginSettings;
 
+	private async perform() {
+		const file = this.app.workspace.getActiveFile();
+
+		const markdownText = file && await this.app.vault.read(file);
+
+		const todo = console.log('>>>', markdownText)
+	}
+
 	async onload() {
 		await this.loadSettings();
 
@@ -20,10 +28,7 @@ export default class ObsidianTelegramPlugin extends Plugin {
 		 * This creates an icon in the left ribbon.
 		 */
 		const ribbonIconEl = this.addRibbonIcon('dice', 'Obsidian-Telegram', (evt: MouseEvent) => {
-			// Called when the user clicks the icon.
-			const ast = fromMarkdown("### Hello vladkuz!");
-			const telegram = toTelegram(ast);
-			new Notice(telegram);
+			this.perform();
 		});
 
 		/**
@@ -41,7 +46,7 @@ export default class ObsidianTelegramPlugin extends Plugin {
 				  .setTitle('Export to Telegram')
 				  .setIcon('export')
 				  .onClick(async () => {
-					new Notice(file.path);
+					this.perform();
 				  });
 			  });
 			})
