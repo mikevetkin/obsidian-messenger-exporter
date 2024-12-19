@@ -18,7 +18,13 @@ export default class ObsidianTelegramPlugin extends Plugin {
 
 		const markdownText = file && await this.app.vault.read(file);
 
-		const todo = console.log('>>>', markdownText)
+		if (markdownText) {
+			const ast = fromMarkdown(markdownText);
+			const telegramMessage = toTelegram(ast);
+			console.log('telegramMessage :>> ', telegramMessage);
+		} else {
+			new Notice("Could not export text to Telegram")
+		}
 	}
 
 	async onload() {
