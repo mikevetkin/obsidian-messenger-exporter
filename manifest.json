@@ -1,11 +1,10 @@
 {
-	"id": "obsidian-telegram",
-	"name": "Obsidian-Telegram",
-	"version": "1.0.0",
-	"minAppVersion": "0.15.0",
-	"description": "Obsidian-Telegram export plugin",
-	"author": "Michael Vetkin & Maxim Shkividorov",
-	"authorUrl": "mikevetkin.com",
-	"fundingUrl": "https://obsidian.md/pricing",
-	"isDesktopOnly": false
+  "id": "garnet",
+  "name": "Garnet",
+  "version": "0.0.1",
+  "minAppVersion": "0.15.0",
+  "description": "Formats notes into telegram messages",
+  "author": "Michael Vetkin & Maxim Shkividorov",
+  "authorUrl": "mikevetkin.com",
+  "isDesktopOnly": false
 }
