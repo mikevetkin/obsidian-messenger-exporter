@@ -2,6 +2,33 @@ import { fromMarkdown } from 'mdast-util-from-markdown';
 import { toTelegram } from 'mdast-util-to-telegram';
 import { App, Editor, MarkdownView, Menu, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 
+const markdownToTelegramHTML = (markdown: string) => {
+    // Преобразуем Markdown ссылки в Telegram-совместимый HTML
+    const htmlContent = markdown.replace(
+        /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+        `<a class="text-entity-link" href="$2" data-entity-type="MessageEntityTextUrl" dir="auto">$1</a>`
+    );
+
+    // Удаляем Markdown форматирование для plain text
+    const plainText = markdown.replace(
+        /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+        '$1 ($2)'
+    );
+
+    // Создаем объект для буфера обмена
+    const clipboardContent = new ClipboardItem({
+        'text/plain': new Blob([plainText], { type: 'text/plain' }),
+        'text/html': new Blob([htmlContent], { type: 'text/html' })
+    });
+
+    // Записываем в буфер обмена
+    navigator.clipboard.write([clipboardContent]).then(() => {
+        console.log('Текст успешно скопирован в буфер обмена!');
+    }).catch((err) => {
+        console.error('Ошибка копирования в буфер обмена:', err);
+    });
+};
+
 interface ObsidianTelegramPluginSettings {
   mySetting: string;
 }
@@ -17,11 +44,21 @@ export default class ObsidianTelegramPlugin extends Plugin {
 		const file = this.app.workspace.getActiveFile();
 
 		const markdownText = file && await this.app.vault.read(file);
+	
 
 		if (markdownText) {
 			const ast = fromMarkdown(markdownText);
+
 			const telegramMessage = toTelegram(ast);
-			navigator.clipboard.writeText(telegramMessage);
+			// navigator.clipboard.writeText(telegramMessage);
+
+			// const htmlContent = telegramMessage.replace(
+			// 	/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+			// 	'<a class="text-entity-link" data-vladkuzator="pridurok" data-entity-type="MessageEntityUrl" dir="auto" href="https://mikevetkin.com">$1</a>'
+			// );
+
+			markdownToTelegramHTML(telegramMessage);
+
 			new Notice("Text was copied in Telegram message format!")
 		} else {
 			new Notice("Could not export text to Telegram")
@@ -50,16 +87,16 @@ export default class ObsidianTelegramPlugin extends Plugin {
 		 */
 		this.registerEvent(
 			this.app.workspace.on('file-menu', (menu, file) => {
-			  menu.addItem((item) => {
+			menu.addItem((item) => {
 				item
-				  .setTitle('Export to Telegram')
-				  .setIcon('export')
-				  .onClick(async () => {
+				.setTitle('Export to Telegram')
+				.setIcon('export')
+				.onClick(async () => {
 					this.perform();
-				  });
-			  });
-			})
-		  );
+				});
+			});
+		})
+	);
 
 		/**
 		 * This adds a status bar item to the bottom of the app.
