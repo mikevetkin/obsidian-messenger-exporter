@@ -1,6 +1,6 @@
 {
   "name": "garnet",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Formats obsidian-notes into telegram messages",
   "main": "main.js",
   "scripts": {
