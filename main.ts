@@ -1,5 +1,5 @@
 import { fromMarkdown } from 'mdast-util-from-markdown';
-// import { toTelegram } from 'mdast-util-to-telegram';
+import { toTelegram } from 'mdast-util-to-telegram';
 import { Notice, Plugin } from 'obsidian';
 
 const makeTelegramClipboardItem = (telegramMessage: string): ClipboardItem => {
@@ -38,9 +38,7 @@ export default class ObsidianTelegramPlugin extends Plugin {
     if (markdownText) {
       const ast = fromMarkdown(markdownText);
 
-      //   const telegramMessage = toTelegram(ast);
-      const telegramMessage = 'Link [link](https://example.com) link';
-
+      const telegramMessage = toTelegram(ast);
       const clipboardContent = makeTelegramClipboardItem(telegramMessage);
 
       navigator.clipboard
