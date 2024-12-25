@@ -175,6 +175,9 @@ dist
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,node
 
+# IDE
+.vscode
+
 # exclude main js
 main.js
 data.json
