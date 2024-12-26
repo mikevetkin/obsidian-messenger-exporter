@@ -1,7 +1,7 @@
 {
   "id": "garnet",
   "name": "Garnet",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "minAppVersion": "0.15.0",
   "description": "Formats notes into telegram messages",
   "author": "Michael Vetkin & Maxim Shkividorov",
