@@ -13,6 +13,10 @@ const makeTelegramClipboardItem = (telegramMessage: string): ClipboardItem => {
     '$1 ($2)',
   );
 
+  // const htmlContent =
+  //   '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">просто цитата одним сообщение</blockquote>';
+  // const plainText = 'просто цитата одним сообщение';
+
   return new ClipboardItem({
     'text/plain': new Blob([plainText], { type: 'text/plain' }),
     'text/html': new Blob([htmlContent], { type: 'text/html' }),
