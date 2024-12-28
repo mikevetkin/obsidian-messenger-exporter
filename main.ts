@@ -2,24 +2,73 @@ import { fromMarkdown } from 'mdast-util-from-markdown';
 import { toTelegram } from 'mdast-util-to-telegram';
 import { Notice, Plugin } from 'obsidian';
 
-const makeTelegramClipboardItem = (telegramMessage: string): ClipboardItem => {
-  const htmlContent = telegramMessage.replace(
-    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
-    `<a class="text-entity-link" href="$2" data-entity-type="MessageEntityTextUrl" dir="auto">$1</a>`,
-  );
+interface ClipboardContent {
+  htmlContent: string;
+  plainText: string;
+}
 
-  const plainText = telegramMessage.replace(
+const replaceBlockquotesWithTelegramStyle = (
+  text: string,
+): ClipboardContent => {
+  const lines = text.split(/\r?\n/); // Разбиваем текст на строки
+  const result: string[] = [];
+  let quoteBuffer: string[] = []; // Буфер для текущей цитаты
+
+  for (const line of lines) {
+    if (line.startsWith('>')) {
+      // Убираем символ '>' и пробел, добавляем строку в буфер
+      quoteBuffer.push(line.slice(1).trim());
+    } else {
+      if (quoteBuffer.length > 0) {
+        // Если буфер заполнен, обрабатываем цитату
+        result.push(
+          `<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">${quoteBuffer.join(' ')}</blockquote>`,
+        );
+        quoteBuffer = []; // Очищаем буфер
+      }
+      result.push(line); // Добавляем текущую строку (не цитату)
+    }
+  }
+
+  // Если текст заканчивается цитатой, обрабатываем оставшийся буфер
+  if (quoteBuffer.length > 0) {
+    result.push(`<div>${quoteBuffer.join(' ')}</div>`);
+  }
+
+  const resultHTML = result.join('\n');
+
+  return {
+    htmlContent: resultHTML,
+    plainText: text,
+  };
+};
+
+const addBaseName = (text: string, baseName: string): string => {
+  return `**${baseName}**\n\n${text}`;
+};
+
+const makeTelegramClipboardItem = (
+  telegramMessage: string,
+  basename: string,
+): ClipboardItem => {
+  const { plainText, htmlContent } =
+    replaceBlockquotesWithTelegramStyle(telegramMessage);
+
+  const text = plainText.replace(
     /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
     '$1 ($2)',
   );
 
-  // const htmlContent =
-  //   '<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">просто цитата одним сообщение</blockquote>';
-  // const plainText = 'просто цитата одним сообщение';
+  const html = htmlContent.replace(
+    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+    `<a class="text-entity-link" href="$2" data-entity-type="MessageEntityTextUrl" dir="auto">$1</a>`,
+  );
 
   return new ClipboardItem({
-    'text/plain': new Blob([plainText], { type: 'text/plain' }),
-    'text/html': new Blob([htmlContent], { type: 'text/html' }),
+    'text/plain': new Blob([addBaseName(text, basename)], {
+      type: 'text/plain',
+    }),
+    'text/html': new Blob([addBaseName(html, basename)], { type: 'text/html' }),
   });
 };
 
@@ -39,11 +88,16 @@ export default class ObsidianTelegramPlugin extends Plugin {
 
     const markdownText = file && (await this.app.vault.read(file));
 
+    const basename = file && file.basename;
+
     if (markdownText) {
       const ast = fromMarkdown(markdownText);
 
       const telegramMessage = toTelegram(ast);
-      const clipboardContent = makeTelegramClipboardItem(telegramMessage);
+      const clipboardContent = makeTelegramClipboardItem(
+        telegramMessage,
+        basename,
+      );
 
       navigator.clipboard
         .write([clipboardContent])
