@@ -55,13 +55,16 @@ const makeTelegramClipboardItem = (
     replaceBlockquotesWithTelegramStyle(telegramMessage);
 
   const text = plainText.replace(
-    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
-    '$1 ($2)',
+    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)?\)/g,
+    (match, label, url) => (url ? `${label} (${url})` : label),
   );
 
   const html = htmlContent.replace(
-    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
-    `<a class="text-entity-link" href="$2" data-entity-type="MessageEntityTextUrl" dir="auto">$1</a>`,
+    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)?\)/g,
+    (match, label, url) =>
+      url
+        ? `<a class="text-entity-link" href="${url}" data-entity-type="MessageEntityTextUrl" dir="auto">${label}</a>`
+        : label,
   );
 
   return new ClipboardItem({
