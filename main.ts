@@ -99,7 +99,7 @@ export default class ObsidianTelegramPlugin extends Plugin {
       const telegramMessage = toTelegram(ast);
       const clipboardContent = makeTelegramClipboardItem(
         telegramMessage,
-        basename,
+        basename || '',
       );
 
       navigator.clipboard
