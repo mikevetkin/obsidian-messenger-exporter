@@ -107,7 +107,7 @@ export default class ObsidianTelegramPlugin extends Plugin {
         .then(() => {
           new Notice('Text was copied in Telegram message format!');
         })
-        .catch((err) => {
+        .catch(() => {
           new Notice('Could not export text to Telegram');
         });
     } else {
@@ -136,7 +136,7 @@ export default class ObsidianTelegramPlugin extends Plugin {
      * This creates line in the "file-menu"
      */
     this.registerEvent(
-      this.app.workspace.on('file-menu', (menu, file) => {
+      this.app.workspace.on('file-menu', (menu) => {
         menu.addItem((item) => {
           item
             .setTitle('Export to Telegram')
