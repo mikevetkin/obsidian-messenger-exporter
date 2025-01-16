@@ -28,6 +28,6 @@
   },
   "dependencies": {
     "mdast-util-from-markdown": "^2.0.2",
-    "mdast-util-to-telegram": "github:mikevetkin/mdast-util-to-telegram#0.0.4"
+    "mdast-util-to-telegram": "github:mikevetkin/mdast-util-to-telegram#0.0.5"
   }
 }
