@@ -1,8 +1,8 @@
 EN / [RU](https://github.com/mikevetkin/obsidian-telegram/blob/main/README.ru.md)
 
-# Telegram exporter
+# Messenger Exporter for Obsidian
 
-> Obsidian-plugin for exporting your notes to telegram
+> Obsidian plugin for exporting your notes to telegram
 
 ## How to use
 
