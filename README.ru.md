@@ -1,6 +1,6 @@
 [EN](https://github.com/mikevetkin/obsidian-telegram/blob/main/README.md) / RU
 
-# Telegram exporter
+# Messenger Exporter для Obsidian
 
 > Плагин для Obsidian, позволяющий экспортировать заметки в Telegram
 
