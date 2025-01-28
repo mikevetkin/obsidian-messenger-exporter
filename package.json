@@ -1,7 +1,7 @@
 {
-  "name": "garnet",
+  "name": "messenger-exporter",
   "version": "0.0.6",
-  "description": "Formats obsidian-notes into telegram messages",
+  "description": "Formats obsidian notes into telegram messages",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
