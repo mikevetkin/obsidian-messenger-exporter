@@ -24,7 +24,7 @@
 
 1. Сначала необходимо установить BRAT в Obsidian;
 2. Откройте настройки BRAT и нажмите "Add Beta plugin" (Добавить бета-плагин);
-3. Вставьте туда ссылку на репозиторий obsidian-telegram: `https://github.com/mikevetkin/obsidian-telegram` (важно, чтобы не было префикса `.git`).
+3. Вставьте туда ссылку на репозиторий obsidian-telegram: `https://github.com/mikevetkin/obsidian-messenger-exporter` (важно, чтобы не было префикса `.git`).
 4. Галочка "enable after installing the plugin" (включить после установки плагина) должна быть активна.
 
 ## Контакты
