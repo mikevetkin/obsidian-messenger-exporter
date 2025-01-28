@@ -24,7 +24,7 @@ To export your note to Telegram
 
 1. First you need to install BRAT in your Obsidian;
 2. Open the BRAT settings, click "Add Beta plugin";
-3. Insert a link to the obsidian-telegram repository there: `https://github.com/mikevetkin/obsidian-telegram ` (it is important that there is no prefix `.git`).
+3. Insert a link to the obsidian-telegram repository there: `https://github.com/mikevetkin/obsidian-messenger-exporter` (it is important that there is no prefix `.git`).
 4. The check mark "enable after installing the plugin" must be enabled.
 
 ## Contacts
