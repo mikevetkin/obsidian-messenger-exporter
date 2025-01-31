@@ -3,75 +3,16 @@ import { toTelegram } from 'mdast-util-to-telegram';
 import { Notice, Plugin } from 'obsidian';
 
 interface ClipboardContent {
-  htmlContent: string;
-  plainText: string;
+  html: string;
+  text: string;
 }
 
-const replaceBlockquotesWithTelegramStyle = (
-  text: string,
-): ClipboardContent => {
-  const lines = text.split(/\r?\n/); // Разбиваем текст на строки
-  const result: string[] = [];
-  let quoteBuffer: string[] = []; // Буфер для текущей цитаты
-
-  for (const line of lines) {
-    if (line.startsWith('>')) {
-      // Убираем символ '>' и пробел, добавляем строку в буфер
-      quoteBuffer.push(line.slice(1).trim());
-    } else {
-      if (quoteBuffer.length > 0) {
-        // Если буфер заполнен, обрабатываем цитату
-        result.push(
-          `<blockquote class="blockquote" data-entity-type="MessageEntityBlockquote">${quoteBuffer.join(' ')}</blockquote>`,
-        );
-        quoteBuffer = []; // Очищаем буфер
-      }
-      result.push(line); // Добавляем текущую строку (не цитату)
-    }
-  }
-
-  // Если текст заканчивается цитатой, обрабатываем оставшийся буфер
-  if (quoteBuffer.length > 0) {
-    result.push(`<div>${quoteBuffer.join(' ')}</div>`);
-  }
-
-  const resultHTML = result.join('\n');
-
-  return {
-    htmlContent: resultHTML,
-    plainText: text,
-  };
-};
-
-const addBaseName = (text: string, baseName: string): string => {
-  return `**${baseName}**\n\n${text}`;
-};
-
-const makeTelegramClipboardItem = (
-  telegramMessage: string,
-  basename: string,
-): ClipboardItem => {
-  const { plainText, htmlContent } =
-    replaceBlockquotesWithTelegramStyle(telegramMessage);
-
-  const text = plainText.replace(
-    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)?\)/g,
-    (match, label, url) => (url ? `${label} (${url})` : label),
-  );
-
-  const html = htmlContent.replace(
-    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)?\)/g,
-    (match, label, url) =>
-      url
-        ? `<a class="text-entity-link" href="${url}" data-entity-type="MessageEntityTextUrl" dir="auto">${label}</a>`
-        : label,
-  );
-
+const makeClipboardItem = ({ html, text }: ClipboardContent): ClipboardItem => {
   return new ClipboardItem({
-    'text/plain': new Blob([addBaseName(text, basename)], {
+    'text/plain': new Blob([text], {
       type: 'text/plain',
     }),
-    'text/html': new Blob([addBaseName(html, basename)], { type: 'text/html' }),
+    'text/html': new Blob([html], { type: 'text/html' }),
   });
 };
 
@@ -96,11 +37,11 @@ export default class ObsidianTelegramPlugin extends Plugin {
     if (markdownText) {
       const ast = fromMarkdown(markdownText);
 
-      const telegramMessage = toTelegram(ast);
-      const clipboardContent = makeTelegramClipboardItem(
-        telegramMessage,
-        basename || '',
-      );
+      const telegramMessage: { html: string; text: string } = toTelegram(ast, {
+        filename: basename,
+        isNeedReturnTextHtml: true,
+      });
+      const clipboardContent = makeClipboardItem(telegramMessage);
 
       navigator.clipboard
         .write([clipboardContent])
